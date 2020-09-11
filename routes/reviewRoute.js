@@ -4,11 +4,12 @@ const reviewController = require('./../controllers/reviewController');
 
 const router = express.Router({ mergeParams: true });
 
+router.use(authController.protect); // Only Authenticated Users Can Access Reviews
+
 router
   .route('/')
   .get(reviewController.getAllReviews)
   .post(
-    authController.protect,
     authController.restrictTo('user'),
     reviewController.checkTourIDAndUserID,
     reviewController.createReview
@@ -16,7 +17,14 @@ router
 
 router
   .route('/:id')
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+  .get(reviewController.getReview)
+  .patch(
+    authController.restrictTo('admin', 'user'),
+    reviewController.updateReview
+  )
+  .delete(
+    authController.restrictTo('admin', 'user'),
+    reviewController.deleteReview
+  );
 
 module.exports = router;

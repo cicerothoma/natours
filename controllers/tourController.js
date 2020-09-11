@@ -1,30 +1,10 @@
 // Node Core Modules
-const fs = require('fs');
 
 // Dev Modules
 const Tour = require('./../models/tourModel');
-const APIFeatures = require('./../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const reviewController = require('./reviewController');
 const factory = require('./handlerFactory');
-
-// const tours = JSON.parse(
-//   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`, 'utf-8')
-// );
-
-// exports.checkID = (req, res, next, val) => {
-//   console.log(`The Tour ID is ${val}`);
-//   if (req.params.id * 1 > tours.length) {
-//     return res.status(404).json({
-//       status: 'fail',
-//       message: `Can't find tour with the id of ${+id}.`,
-//       app: 'Natours',
-//     });
-//   }
-
-//   next();
-// };
+const AppError = require('../utils/appError');
 
 // Middleware Function Below for Aliasing
 exports.topCheapTours = (req, res, next) => {
@@ -35,60 +15,13 @@ exports.topCheapTours = (req, res, next) => {
 };
 
 // This gets all the tours from our database
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // EXECUTE THE QUERY
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
+exports.getAllTours = factory.getAll(Tour);
 
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'Success',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
+exports.getTour = factory.getOne(Tour, {
+  path: 'reviews',
 });
-
-exports.getTour = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const tour = await Tour.findById(id).populate('reviews');
-
-  if (!tour) {
-    return next(new AppError('No Tour Found With That ID', 404));
-  }
-  res.status(200).json({
-    status: 'Success',
-    data: {
-      tour,
-    },
-  });
-});
-
 exports.createTour = factory.createOne(Tour);
-
 exports.updateTour = factory.updateOne(Tour);
-
-// exports.deleteTour = catchAsync(async (req, res) => {
-//   const { id } = req.params;
-//   const tour = await Tour.findByIdAndDelete(id);
-
-//   if (!tour) {
-//     return next(new AppError('No Tour Found With That ID', 404));
-//   }
-
-//   res.status(204).json({
-//     status: 'Success',
-//     data: {
-//       tour: null,
-//     },
-//   });
-// });
-
 exports.deleteTour = factory.deleteOne(Tour);
 
 exports.getTourStat = catchAsync(async (req, res, next) => {
@@ -160,6 +93,39 @@ exports.getMonthlyPlan = catchAsync(async (req, res) => {
     status: 'Success',
     data: {
       plan,
+    },
+  });
+});
+
+// '/tours-within/:distance/center/:latlng/unit/:unit'
+// '/tours-within/233/center/:34.111745,-118.113491/unit/:mi'
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  // Checks if User Specified The Latitude and Longitude
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        'Please provide latitude and longitude in the format lat,lng',
+        400
+      )
+    );
+  }
+
+  // Geospatial Queries work like regular queries
+
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      data: tours,
     },
   });
 });

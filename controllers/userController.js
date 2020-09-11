@@ -13,17 +13,10 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users,
-    },
-  });
-});
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user tries to update password
@@ -53,6 +46,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.createUser = (req, res) => {
+  res.status(404).json({
+    status: 'fail',
+    message: 'This route is not defined! Please use /signup instead',
+  });
+};
+
 exports.deleteMe = catchAsync(async (req, res, next) => {
   // 1) Get User and update
   const user = await User.findByIdAndUpdate(req.user.id, { active: false });
@@ -64,15 +64,10 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    requestedAt: req.requestTime,
-    message: 'This Route Is Not Yet defined',
-  });
-};
+exports.getAllUsers = factory.getAll(User);
+exports.getUser = factory.getOne(User);
 
-exports.createUser = factory.createOne(User); // Although this is not needed because of the sign-up function in the authController file
 // Do not attempt to change user password with this!!!!
+
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
