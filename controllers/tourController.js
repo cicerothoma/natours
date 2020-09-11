@@ -118,6 +118,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   // Geospatial Queries work like regular queries
 
   const tours = await Tour.find({
+    // The $geoWithin is the geospatial query
     startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
   });
 
