@@ -205,11 +205,11 @@ tourSchema.pre(/^find/, function (next) {
 
 // Aggregation Middleware: Runs for every aggregation pipeline
 // The "this" keyword for document middlewares refers to the currently processed aggregation object
-tourSchema.pre('aggregate', function (next, docs) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  console.log(this.pipeline());
-  next();
-});
+// tourSchema.pre('aggregate', function (next, docs) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   console.log(this.pipeline());
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 

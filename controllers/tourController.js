@@ -130,3 +130,47 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// GeoSpatial Aggregation
+
+exports.getDistances = catchAsync(async (req, res, next) => {
+  const { unit, latlng } = req.params;
+  const [lat, lng] = latlng.split(',');
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        'Please provide latitude and longitude in the format lat,lng',
+        400
+      )
+    );
+  }
+
+  const distances = await Tour.aggregate([
+    {
+      // $geoNear is the only aggregation pipeline stage that actually exists
+      // $geoNear also need to be the first stage in the pipeline
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [+lng, +lat],
+        },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier,
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: distances,
+    },
+  });
+});
