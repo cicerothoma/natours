@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -11,11 +12,18 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
 const reviewRouter = require('./routes/reviewRoute');
+const viewRouter = require('./routes/viewRoutes');
+
 const app = express();
 
+// Sets Template Engine to render websites on the server
+app.set('view engine', 'pug');
+// Lets Express know the folder our views are located
+app.set('views', path.join(__dirname, 'views'));
 // 1) Global Middlewares
 // This is how we use middleware (app.use)
-
+// Serving Static Files
+app.use(express.static(path.join(__dirname, 'public')));
 // Set security HTTP Header (Helmet )
 app.use(helmet());
 console.log(process.env.NODE_ENV);
@@ -57,9 +65,6 @@ app.use(
   })
 );
 
-// Serving Static Files
-app.use(express.static(`${__dirname}/public`));
-
 // Test Middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -68,6 +73,7 @@ app.use((req, res, next) => {
 });
 
 // 2) Routes
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
