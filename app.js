@@ -25,7 +25,11 @@ app.set('views', path.join(__dirname, 'views'));
 // Serving Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 // Set security HTTP Header (Helmet )
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 console.log(process.env.NODE_ENV);
 
 // Use Mogan to log api request in development mode
