@@ -80,12 +80,13 @@ exports.login = async (req, res, next) => {
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Get the token and ckeck if it exists
   let token = null;
-  console.log(req.headers);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   console.log(token);
 
@@ -118,6 +119,34 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Grant Access to protected route
   req.user = currentUser;
+  next();
+});
+// Middleware to check if the user is logged in or not | only for rendered pages - there will be no error
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    // 1) Verifies token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    // 2) Check if users still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+
+    // console.log(user);
+    // 3) Check if users changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    // There is a logged in user
+    // Adds the current user to PUG template - Every PUG template has access to the local object in the req
+    res.locals.user = currentUser;
+    return next();
+  }
   next();
 });
 
