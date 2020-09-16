@@ -1,5 +1,6 @@
 const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 exports.getOverview = catchAsync(async (req, res, next) => {
   // 1) Get All Tours From The Database
@@ -17,6 +18,11 @@ exports.getTour = catchAsync(async (req, res, next) => {
     'reviews',
     'review rating user'
   );
+  if (!tour) {
+    return next(
+      new AppError(`Can't find tour with name: ${req.params.slug}`, 404)
+    );
+  }
   console.log(tour);
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
@@ -28,4 +34,15 @@ exports.getLoginForm = (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',
   });
+};
+
+exports.profile = (req, res) => {
+  res.status(200).render('profile', {
+    title: 'Your Account',
+  });
+};
+
+exports.updateUserData = (req, res, next) => {
+  console.log('UPDATING USER-DATA', req.body);
+  next();
 };

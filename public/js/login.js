@@ -35,3 +35,23 @@ export const login = async (email, password) => {
     showAlert('error', err.response.data.message);
   }
 };
+
+export const logout = async () => {
+  console.log('Hello');
+  try {
+    // AXIOS
+    const res = await axios({
+      method: 'GET',
+      url: 'http://127.0.0.1:4000/api/v1/users/logout',
+    });
+    console.log(res);
+    // FETCH API
+    // const res = await fetch('http://127.0.0.1:4000/api/v1/users/logout');
+    // console.log(res.json());
+    if (res.data.status === 'success') {
+      window.location.reload();
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
