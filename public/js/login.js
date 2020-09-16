@@ -26,9 +26,12 @@ export const login = async (email, password) => {
     });
     const username = response.data.data.user.name;
     if (response.data.status === 'success') {
-      showAlert(response.data.status, `Welcome Back ${username}!!`);
+      showAlert('success', `Welcome Back ${username}!!`);
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
     }
   } catch (err) {
-    alert(err.response.data.message);
+    showAlert('error', err.response.data.message);
   }
 };

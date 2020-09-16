@@ -8504,7 +8504,10 @@ var login = /*#__PURE__*/function () {
             username = response.data.data.user.name;
 
             if (response.data.status === 'success') {
-              (0, _alerts.showAlert)(response.data.status, "Welcome Back ".concat(username, "!!"));
+              (0, _alerts.showAlert)('success', "Welcome Back ".concat(username, "!!"));
+              window.setTimeout(function () {
+                location.assign('/');
+              }, 1500);
             }
 
             _context.next = 11;
@@ -8513,7 +8516,7 @@ var login = /*#__PURE__*/function () {
           case 8:
             _context.prev = 8;
             _context.t0 = _context["catch"](0);
-            alert(_context.t0.response.data.message);
+            (0, _alerts.showAlert)('error', _context.t0.response.data.message);
 
           case 11:
           case "end":
