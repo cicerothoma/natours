@@ -1,6 +1,7 @@
-const form = document.querySelector('.form');
+import axios from 'axios';
+import { showAlert } from './alerts';
 
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
     // Using FETCH API. Doesn't return response from server || Still Works
     // const response = await fetch('http://127.0.0.1:4000/api/v1/users/login', {
@@ -25,19 +26,9 @@ const login = async (email, password) => {
     });
     const username = response.data.data.user.name;
     if (response.data.status === 'success') {
-      alert(`Welcome back ${username}`);
-      setTimeout(() => {
-        location.assign('/');
-      }, 900);
+      showAlert(response.data.status, `Welcome Back ${username}!!`);
     }
   } catch (err) {
     alert(err.response.data.message);
   }
 };
-
-form.addEventListener('submit', (el) => {
-  el.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  login(email, password);
-});
