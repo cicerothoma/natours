@@ -1,10 +1,47 @@
 // Node Core Modules
+// 3rd party modules
+const multer = require('multer');
+const sharp = require('sharp');
 
 // Dev Modules
 const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
+
+// Saving the image to memory as buffer
+const multerStorage = multer.memoryStorage();
+
+// Create a multer filter
+const multerFilter = (req, file, cb) => {
+  // Checks if the file uploaded is an image
+  if (file.mimetype.startsWith('image')) {
+    return cb(null, true);
+  } else {
+    return cb(
+      new AppError('Not an image! Please upload only images', 400),
+      false
+    );
+  }
+};
+
+// Configuring Multer Upload || Returns a middleware function
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+
+// Middleware for processing tour images
+exports.resizeTourImage = (req, res, next) => {
+  if (!req.files) {
+    return next();
+  }
+  console.log(req.files);
+
+  next();
+};
 
 // Middleware Function Below for Aliasing
 exports.topCheapTours = (req, res, next) => {
