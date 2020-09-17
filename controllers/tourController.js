@@ -34,14 +34,37 @@ exports.uploadTourImages = upload.fields([
 ]);
 
 // Middleware for processing tour images
-exports.resizeTourImage = (req, res, next) => {
-  if (!req.files) {
+exports.resizeTourImage = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) {
     return next();
   }
-  console.log(req.files);
+  // 1) Process Cover Image
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
+
+  // 2) Process other images
+  req.body.images = [];
+  const fileArray = req.files.images.map(async (file, index) => {
+    const filename = `tour-${req.params.id}-${Date.now()}-${index + 1}.jpeg`;
+    await sharp(file.buffer)
+      .resize(2000, 1333) // Resizes the Image
+      .toFormat('jpeg') // Formats it to the specified extension
+      .jpeg({ quality: 90 }) // Compresses it so it doesn't take up too much space
+      .toFile(`public/img/tours/${filename}`); // Save the converted file to the specified path
+
+    req.body.images.push(filename);
+  });
+
+  await Promise.all(fileArray);
+  console.log(req.body);
 
   next();
-};
+});
 
 // Middleware Function Below for Aliasing
 exports.topCheapTours = (req, res, next) => {
