@@ -8616,27 +8616,26 @@ var updateSettings = /*#__PURE__*/function () {
 
           case 4:
             res = _context.sent;
-            console.log(res);
 
             if (res.data.status === 'success') {
               (0, _alerts.showAlert)('success', "".concat(type, " Updated Successfully!").toUpperCase());
             }
 
-            _context.next = 13;
+            _context.next = 12;
             break;
 
-          case 9:
-            _context.prev = 9;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
             console.log(_context.t0.response);
             (0, _alerts.showAlert)('error', _context.t0.response.data.message);
 
-          case 13:
+          case 12:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 9]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function updateSettings(_x, _x2) {

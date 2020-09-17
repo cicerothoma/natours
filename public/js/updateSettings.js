@@ -12,7 +12,6 @@ export const updateSettings = async (data, type) => {
       method: 'PATCH',
       data,
     });
-    console.log(res);
     if (res.data.status === 'success') {
       showAlert('success', `${type} Updated Successfully!`.toUpperCase());
     }
