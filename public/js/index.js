@@ -34,9 +34,15 @@ if (logoutButton) {
 if (updateProfileForm) {
   updateProfileForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateSettings({ name, email }, 'data');
+    // To send a file from the form using the API we need to programmatically recreate an HTML Form and make it multi-part
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    if (document.getElementById('photo')) {
+      form.append('photo', document.getElementById('photo').files[0]);
+    }
+    console.log(form);
+    updateSettings(form, 'data');
   });
 }
 

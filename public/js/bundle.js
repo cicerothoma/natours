@@ -8618,18 +8618,20 @@ var updateSettings = /*#__PURE__*/function () {
 
             if (res.data.status === 'success') {
               (0, _alerts.showAlert)('success', "".concat(type, " Updated Successfully!").toUpperCase());
+              window.setTimeout(function () {
+                return window.location.reload();
+              }, 1000);
             }
 
-            _context.next = 12;
+            _context.next = 11;
             break;
 
           case 8:
             _context.prev = 8;
             _context.t0 = _context["catch"](0);
-            console.log(_context.t0.response);
             (0, _alerts.showAlert)('error', _context.t0.response.data.message);
 
-          case 12:
+          case 11:
           case "end":
             return _context.stop();
         }
@@ -8940,13 +8942,18 @@ if (logoutButton) {
 
 if (updateProfileForm) {
   updateProfileForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    (0, _updateSettings.updateSettings)({
-      name: name,
-      email: email
-    }, 'data');
+    e.preventDefault(); // To send a file from the form using the API we need to programmatically recreate an HTML Form and make it multi-part
+
+    var form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+
+    if (document.getElementById('photo')) {
+      form.append('photo', document.getElementById('photo').files[0]);
+    }
+
+    console.log(form);
+    (0, _updateSettings.updateSettings)(form, 'data');
   });
 }
 

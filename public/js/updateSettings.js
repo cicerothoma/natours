@@ -14,9 +14,9 @@ export const updateSettings = async (data, type) => {
     });
     if (res.data.status === 'success') {
       showAlert('success', `${type} Updated Successfully!`.toUpperCase());
+      window.setTimeout(() => window.location.reload(), 1000);
     }
   } catch (err) {
-    console.log(err.response);
     showAlert('error', err.response.data.message);
   }
 };
