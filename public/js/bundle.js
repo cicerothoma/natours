@@ -8540,38 +8540,37 @@ var logout = /*#__PURE__*/function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            console.log('Hello');
-            _context2.prev = 1;
-            _context2.next = 4;
+            _context2.prev = 0;
+            _context2.next = 3;
             return (0, _axios.default)({
               method: 'GET',
               url: 'http://127.0.0.1:4000/api/v1/users/logout'
             });
 
-          case 4:
+          case 3:
             res = _context2.sent;
             console.log(res); // FETCH API
             // const res = await fetch('http://127.0.0.1:4000/api/v1/users/logout');
             // console.log(res.json());
 
             if (res.data.status === 'success') {
-              window.location.reload();
+              window.location.assign('/');
             }
 
-            _context2.next = 12;
+            _context2.next = 11;
             break;
 
-          case 9:
-            _context2.prev = 9;
-            _context2.t0 = _context2["catch"](1);
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
             (0, _alerts.showAlert)('error', _context2.t0.response.data.message);
 
-          case 12:
+          case 11:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[1, 9]]);
+    }, _callee2, null, [[0, 8]]);
   }));
 
   return function logout() {
@@ -9019,7 +9018,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61061" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49429" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,6 +1,6 @@
-const userController = require('./../controllers/userController');
-const authController = require('./../controllers/authController');
 const express = require('express');
+const authController = require('./../controllers/authController');
+const userController = require('./../controllers/userController');
 
 const router = express.Router(); // This is like a mini-application || Middleware always run in sequence
 
@@ -16,7 +16,11 @@ router.use(authController.protect); // This enforces authentication for any rout
 
 router.patch('/updateMyPassword', authController.updatePassword);
 
-router.patch('/updateMe', userController.updateMe);
+router.patch(
+  '/updateMe',
+  userController.uploadUserPhoto,
+  userController.updateMe
+);
 router.delete('/deleteMe', userController.deleteMe);
 router.get('/me', userController.getMe, userController.getUser);
 

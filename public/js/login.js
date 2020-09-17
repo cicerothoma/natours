@@ -37,7 +37,6 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
-  console.log('Hello');
   try {
     // AXIOS
     const res = await axios({
@@ -49,7 +48,7 @@ export const logout = async () => {
     // const res = await fetch('http://127.0.0.1:4000/api/v1/users/logout');
     // console.log(res.json());
     if (res.data.status === 'success') {
-      window.location.reload();
+      window.location.assign('/');
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
