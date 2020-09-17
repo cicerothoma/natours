@@ -40,19 +40,19 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
 exports.uploadUserPhoto = upload.single('photo');
 
-exports.resizeUserPhoto = (req, res, next) => {
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) {
     return next();
   }
   // Store the file name into the req.file object
   req.file.filename = `user-${req.user._id}-${Date.now()}.jpeg`;
-  sharp(req.file.buffer)
+  await sharp(req.file.buffer)
     .resize(500, 500) // Resizes the Image
     .toFormat('jpeg') // Formats it to the specified extension
     .jpeg({ quality: 90 }) // Compresses it so it doesn't take up too much space
     .toFile(`public/img/users/${req.file.filename}`); // Save the converted file to the specified path
   next();
-};
+});
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
