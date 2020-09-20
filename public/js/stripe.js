@@ -4,7 +4,6 @@ import { showAlert } from './alerts';
 const stripe = Stripe(
   'pk_test_51HTHBeHQW8t21RlGPtXSPGXio8JV5Dw36ymSuVeD0MUnsL4FCluPi7FBqWHPfxSzqyDiwUimipicEDzstm1DRMLc00AFZgoJGI'
 );
-
 export const bookTour = async (tourID) => {
   try {
     // 1) Get the Checkout Session from the API
@@ -18,6 +17,6 @@ export const bookTour = async (tourID) => {
       sessionId: session.data.session.id,
     });
   } catch (err) {
-    showAlert('error', err.response.data.message);
+    console.log(err);
   }
 };
