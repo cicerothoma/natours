@@ -151,16 +151,10 @@ tourSchema.virtual('reviews', {
 
 // Document Middleware: Runs before the actual document is saved to database
 // The "this" keyword for document middlewares refers to the currently processed document
-tourSchema.pre(
-  'save',
-  function (next) {
-    this.slug = slugify(this.name);
-    next();
-  },
-  function (err) {
-    console.log(err);
-  }
-);
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name);
+  next();
+});
 
 // The Code below demonstrates how to embed data from other(user) collection using a pre-save hook or document middleware
 // And it only works for creating new documents and won't work for updating the user fields in the user collections

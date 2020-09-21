@@ -8549,28 +8549,29 @@ var logout = /*#__PURE__*/function () {
 
           case 3:
             res = _context2.sent;
-            console.log(res); // FETCH API
+
+            // console.log(res);
+            // FETCH API
             // const res = await fetch('http://127.0.0.1:4000/api/v1/users/logout');
             // console.log(res.json());
-
             if (res.data.status === 'success') {
               window.location.assign('/');
             }
 
-            _context2.next = 11;
+            _context2.next = 10;
             break;
 
-          case 8:
-            _context2.prev = 8;
+          case 7:
+            _context2.prev = 7;
             _context2.t0 = _context2["catch"](0);
             (0, _alerts.showAlert)('error', _context2.t0.response.data.message);
 
-          case 11:
+          case 10:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 8]]);
+    }, _callee2, null, [[0, 7]]);
   }));
 
   return function logout() {
@@ -8681,28 +8682,26 @@ var bookTour = /*#__PURE__*/function () {
 
           case 3:
             session = _context.sent;
-            console.log(session); // 2) Create checkout form + charge the debit/card
-
-            _context.next = 7;
+            _context.next = 6;
             return stripe.redirectToCheckout({
               sessionId: session.data.session.id
             });
 
-          case 7:
-            _context.next = 12;
+          case 6:
+            _context.next = 11;
             break;
 
-          case 9:
-            _context.prev = 9;
+          case 8:
+            _context.prev = 8;
             _context.t0 = _context["catch"](0);
             console.log(_context.t0);
 
-          case 12:
+          case 11:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 9]]);
+    }, _callee, null, [[0, 8]]);
   }));
 
   return function bookTour(_x) {
@@ -9019,9 +9018,9 @@ if (updateProfileForm) {
 
     if (document.getElementById('photo')) {
       form.append('photo', document.getElementById('photo').files[0]);
-    }
+    } // console.log(form);
 
-    console.log(form);
+
     (0, _updateSettings.updateSettings)(form, 'data');
   });
 }

@@ -43,7 +43,7 @@ export const logout = async () => {
       method: 'GET',
       url: 'http://127.0.0.1:4000/api/v1/users/logout',
     });
-    console.log(res);
+    // console.log(res);
     // FETCH API
     // const res = await fetch('http://127.0.0.1:4000/api/v1/users/logout');
     // console.log(res.json());

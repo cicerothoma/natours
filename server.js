@@ -4,8 +4,8 @@ dotenv.config({ path: './config.env' });
 
 // We can handle uncaught exceptions globally by using events and events listener
 process.on('uncaughtException', (err) => {
-  console.log(err);
   console.log('UNCAUGHT EXCEPTION!! Shuting Down!!');
+  console.log(err.name, err.message);
   process.exit();
 });
 

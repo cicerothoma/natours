@@ -60,7 +60,6 @@ reviewSchema.pre(/^find/, function (next) {
 // Static Methods can be called directly on the Model unlike Instance methods that are called on the document
 reviewSchema.statics.calcAverageRatings = async function (tourID) {
   // In Static Methods the "this" keyword points to the current model, in the case (The Review Model)
-  console.log(tourID);
   const stats = await this.aggregate([
     // The Aggregate method always returns a promise
     {
@@ -74,7 +73,6 @@ reviewSchema.statics.calcAverageRatings = async function (tourID) {
       },
     },
   ]);
-  console.log(stats);
   if (stats.length > 0) {
     await Tour.findByIdAndUpdate(tourID, {
       ratingsAverage: stats[0].avgRating,

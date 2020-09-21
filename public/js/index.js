@@ -43,7 +43,7 @@ if (updateProfileForm) {
     if (document.getElementById('photo')) {
       form.append('photo', document.getElementById('photo').files[0]);
     }
-    console.log(form);
+    // console.log(form);
     updateSettings(form, 'data');
   });
 }
