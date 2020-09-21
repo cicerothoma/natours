@@ -18,7 +18,7 @@ export const login = async (email, password) => {
     // Using Axios | Best Solution
     const response = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:4000/api/v1/users/login',
+      url: '/api/v1/users/login', // This works because the API and website are hosted on the same platform
       data: {
         email,
         password,
@@ -41,7 +41,7 @@ export const logout = async () => {
     // AXIOS
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:4000/api/v1/users/logout',
+      url: '/api/v1/users/logout',
     });
     // console.log(res);
     // FETCH API

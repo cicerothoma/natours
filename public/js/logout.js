@@ -6,11 +6,11 @@ if (window.location.pathname.includes('/')) {
         try {
           //   const res = await axios({
           //     method: 'GET',
-          //     url: 'http://127.0.0.1:4000/api/v1/users/logout',
+          //     url: '/api/v1/users/logout',
           //   });
           //   console.log(res);
           // The FETCH API also works too
-          let res = await fetch('http://127.0.0.1:4000/api/v1/users/logout');
+          let res = await fetch('/api/v1/users/logout');
           res = res.json();
           // console.log(res);
 
