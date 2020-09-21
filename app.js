@@ -33,7 +33,7 @@ app.use(
     contentSecurityPolicy: false,
   })
 );
-console.log(process.env.NODE_ENV);
+// console.log(process.env.NODE_ENV);
 
 // Use Mogan to log api request in development mode
 if (process.env.NODE_ENV === 'development') {
