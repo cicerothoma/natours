@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -29,6 +30,13 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 // 1) Global Middlewares
 // This is how we use middleware (app.use)
+
+// Implements CORS {CROSS ORIGIN REQUEST SHARING}
+app.use(cors());
+
+// The options is a http method like GET, POST, etc (Sent On a Pre Flight Phase)
+app.options('*', cors());
+
 // Serving Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 // Set security HTTP Header (Helmet )
