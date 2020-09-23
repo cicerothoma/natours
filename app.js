@@ -17,7 +17,11 @@ const reviewRouter = require('./routes/reviewRoute');
 const bookingRouter = require('./routes/bookingRoute');
 const viewRouter = require('./routes/viewRoutes');
 
+// Start Express App
 const app = express();
+
+// Trusts Proxy (Important for Heroku to work properly)
+app.enable('trust proxy');
 
 // Sets Template Engine to render websites on the server
 app.set('view engine', 'pug');
