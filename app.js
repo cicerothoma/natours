@@ -16,6 +16,7 @@ const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
 const reviewRouter = require('./routes/reviewRoute');
 const bookingRouter = require('./routes/bookingRoute');
+const bookingController = require('./controllers/bookingController');
 const viewRouter = require('./routes/viewRoutes');
 
 // Start Express App
@@ -60,6 +61,13 @@ const limiter = rateLimit({
 
 // Limit request from the same API
 app.use('/api', limiter);
+
+// Stripe Webhook
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 // Body Parser (To parse body form the request that was made || Reading Request from the body || PUT, POST, PATCH requests)
 app.use(express.json({ limit: '10kb' }));
