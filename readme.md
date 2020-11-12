@@ -13,3 +13,4 @@ Natours is a fictional company that offers quality tours with experienced tour g
 - MongoDB
 - Mongoose
 - PUG
+- Stripe API
